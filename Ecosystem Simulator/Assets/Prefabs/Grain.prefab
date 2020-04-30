@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8694945666392833108}
   - component: {fileID: 2173402528292005878}
   - component: {fileID: 4141307169745118090}
+  - component: {fileID: 7126130293294301181}
   m_Layer: 0
   m_Name: Grain
   m_TagString: Untagged
@@ -77,3 +78,15 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &7126130293294301181
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1986633638383848012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419faadeec5ee0a4fa382b7df13d7595, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

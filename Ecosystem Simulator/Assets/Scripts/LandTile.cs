@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class LandTile : Tile {
 
-    public bool hasGrain;
     public GameObject grain;
 
     [SerializeField]
@@ -40,7 +39,7 @@ public class LandTile : Tile {
         if (!hasGrain) {
             grain = Instantiate(WorldInfo._instance.grainPrefab, transform.position + new Vector3(0, 5.5f, 0), Quaternion.identity);
             grain.transform.parent = transform;
-            hasGrain = true;
+           // hasGrain = true;
 
             WorldGenerator._instance.grainCount++;
         }

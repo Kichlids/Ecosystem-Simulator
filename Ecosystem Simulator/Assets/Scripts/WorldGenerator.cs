@@ -43,20 +43,6 @@ public class WorldGenerator : MonoBehaviour {
     private void Start() {
         GenerateMap();
 
-        List<Coord> path = Navigation.PathFind(new Coord(41, 23), new Coord(39, 11));
-        if (path == null) {
-            print("null");
-        }
-        for (int i = 0; i < path.Count; i++) {
-            Debug.Log(path[i].x + "," + path[i].y);
-        }
-
-        foreach (Coord element in path) {
-            int x = element.x;
-            int y = element.y;
-
-            Destroy(activeTiles[x, y].gameObject);
-        }
 
         print("Done");
     }
@@ -145,6 +131,19 @@ public class WorldGenerator : MonoBehaviour {
 
         activeTiles = null;
         walkableTiles = null;
+    }
+
+    public void RegisterMovement(Coord src, string tag) {
+
+        if (tag == "Grain") {
+
+        }
+        else if (tag == "Chicken") {
+
+        }
+        else if (tag == "Fox") {
+
+        }
     }
 
     private void OnValidate() {
