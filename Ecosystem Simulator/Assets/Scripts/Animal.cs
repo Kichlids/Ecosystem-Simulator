@@ -22,6 +22,8 @@ public class Animal : MonoBehaviour
     protected float moveTime = 0;
     [SerializeField]
     protected int visionRadius;
+    [SerializeField]
+    protected int exploreRadius;
 
     // Behavior variables
     [SerializeField]

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class Chicken : Animal
 {
+    
+
     private void Start() {
 
         action = Action.Explore;

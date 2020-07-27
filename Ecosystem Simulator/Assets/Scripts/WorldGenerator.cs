@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum TileType { Land, Sand, Water };
+public enum TileType { Hill, Land, Sand, Water };
 
 public class WorldGenerator : MonoBehaviour {
     [Header("Map Variables")]
@@ -22,6 +22,8 @@ public class WorldGenerator : MonoBehaviour {
     public GameObject[,] activeTiles;
     public bool[,] walkableTiles;
 
+    [SerializeField]
+    private int hillTileCount = 0;
     [SerializeField]
     private int landTileCount = 0;
     [SerializeField]
@@ -102,6 +104,10 @@ public class WorldGenerator : MonoBehaviour {
             landTileCount++;
             return WorldInfo._instance.landTilePrefab;
         }
+        else if (threshold <= WorldInfo._instance.hillThreshold) {
+            hillTileCount++;
+            return WorldInfo._instance.hillTilePrefab;
+        }
         else {
             return null;
         }
@@ -121,10 +127,12 @@ public class WorldGenerator : MonoBehaviour {
         List<GameObject> waterTiles = GetActiveTiles("Water");
         List<GameObject> sandTiles = GetActiveTiles("Sand");
         List<GameObject> landTiles = GetActiveTiles("Land");
+        List<GameObject> hillTiles = GetActiveTiles("Hill");
 
         tiles.AddRange(waterTiles);
         tiles.AddRange(sandTiles);
         tiles.AddRange(landTiles);
+        tiles.AddRange(hillTiles);
 
         foreach (GameObject tile in tiles)
             DestroyImmediate(tile);

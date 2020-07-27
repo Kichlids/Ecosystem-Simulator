@@ -8,15 +8,19 @@ public class WorldInfo : MonoBehaviour {
     public float tileSizeMultiplier = 10f;
     public GameObject waterTilePrefab;
     [Range(0, 1)]
-    public float waterThreshold = 0.3f;
+    public float waterThreshold;
     [Space]
     public GameObject sandTilePrefab;
     [Range(0, 1)]
-    public float sandThreshold = 0.4f;
+    public float sandThreshold;
     [Space]
     public GameObject landTilePrefab;
     [Range(0, 1)]
-    public float landThreshold = 1f;
+    public float landThreshold;
+    [Space]
+    public GameObject hillTilePrefab;
+    [Range(0, 1)]
+    public float hillThreshold;
 
     [Header("Item Spawns")]
     public GameObject grainPrefab;
@@ -35,6 +39,7 @@ public class WorldInfo : MonoBehaviour {
     public float chickenThirstThreshold = 40;
     public float chickenWalkSpeed = 0f;
     public int chickenVisionRadius = 8;
+    public int chickenExploreRadius = 2;
 
     public float waterConsumptionValue = 40f;
 
