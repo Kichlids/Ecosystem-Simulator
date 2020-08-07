@@ -11,7 +11,7 @@ public class Animal : MonoBehaviour
 {
     public Action action;
 
-    // Movement variables
+    [Header("Movement")]
     [SerializeField]
     protected Coord myLocation;
     [SerializeField]
@@ -25,7 +25,7 @@ public class Animal : MonoBehaviour
     [SerializeField]
     protected int exploreRadius;
 
-    // Behavior variables
+    [Header("Behavior")]
     [SerializeField]
     protected float health;
     [SerializeField]
@@ -34,12 +34,56 @@ public class Animal : MonoBehaviour
     public float thirstMeter;
     [SerializeField]
     protected float walkSpeed;
+    [SerializeField]
+    protected bool isDead;
 
+    protected WorldGenerator worldGenerator;
+    protected WorldInfo worldInfo;
+
+    protected void Start() {
+        worldInfo = WorldInfo._instance;
+        worldGenerator = WorldGenerator._instance;
+
+        action = Action.Explore;
+    }
 
     public void Init(Coord location) {
         this.myLocation = location;
+        isDead = false;
     }
 
+    // Find the closest tile that contains food
+    protected Coord FindFoodCoord(Coord src, LivingEntityType type, int visionRadius) {
+        return Navigation.FindItem(src, type, visionRadius);
+    }
+
+    // Find the closest tile adjacent to water tile
+    protected Coord FindWaterCoord(Coord src, int visionRadius) {
+
+        List<Coord> validTiles = Navigation.FindVisibleTiles(src, visionRadius);
+
+        if (validTiles.Count <= 0) {
+            return null;
+        }
+
+        Coord minCoord = null;
+        int minDist = int.MaxValue;
+
+        foreach (Coord coord in validTiles) {
+
+            if (IsAdjacentToWaterTile(coord)) {
+                int dist = Navigation.Distance(src, coord);
+                if (dist < minDist) {
+                    minCoord = coord;
+                    minDist = dist;
+                }
+            }
+        }
+
+        return minCoord;
+    }
+
+    // Find a random coordinate within vision radius
     protected Coord FindRandomCoord(Coord src, int visionRadius) {
 
         List<Coord> validCoords = Navigation.FindVisibleTiles(src, visionRadius);
@@ -52,6 +96,7 @@ public class Animal : MonoBehaviour
         return validCoords[random];
     }
 
+    // Check if a coordinate is adjacent to water tile
     protected bool IsAdjacentToWaterTile(Coord src) {
 
         Coord left = new Coord(src.x - 1, src.y);
@@ -72,45 +117,107 @@ public class Animal : MonoBehaviour
         return false;
     }
 
-    protected Coord FindWaterCoord(Coord src, int visionRadius) {
+    // Decrement hunger/health
+    public void ExpendResources() {
 
-        List<Coord> validTiles = Navigation.FindVisibleTiles(src, visionRadius);
+        float hungerDecrement = Time.deltaTime;
+        float thirstDecrement = Time.deltaTime;
 
-        if (validTiles.Count <= 0) {
-            return null;
+        if (action == Action.Run) {
+            hungerMeter *= 2;
+            thirstDecrement *= 2;
         }
 
-        Coord minCoord = null;
-        int minDist = int.MaxValue;
-
-        foreach(Coord coord in validTiles) {
-
-            if (IsAdjacentToWaterTile(coord)) {
-                int dist = Navigation.Distance(src, coord);
-                if (dist < minDist) {
-                    minCoord = coord;
-                    minDist = dist;
-                }
-            }
+        if (hungerMeter < 0) {
+            hungerMeter = 0;
+        }
+        else {
+            hungerMeter -= hungerDecrement;
         }
 
-        return minCoord;
-
-    }
-
-    public void Consume(ConsumptionType type) {
-
-        if (type == ConsumptionType.Food) {
-            hungerMeter += WorldInfo._instance.grainConsumptionValue;
-            if (hungerMeter > WorldInfo._instance.chickenMaxTimeUntilDeathHunger) {
-                hungerMeter = WorldInfo._instance.chickenMaxTimeUntilDeathHunger;
-            }
+        if (thirstMeter < 0) {
+            thirstMeter = 0;
         }
-        else if (type == ConsumptionType.Water) {
-            thirstMeter += WorldInfo._instance.waterConsumptionValue;
-            if (thirstMeter > WorldInfo._instance.chickenMaxTimeUntilDeathThirst) {
-                thirstMeter = WorldInfo._instance.chickenMaxTimeUntilDeathThirst;
-            }
+        else {
+            thirstMeter -= thirstDecrement;
         }
     }
+
+    #region Behavioral Related Functions
+
+    protected void DetermineNextState(float hungerThreshold, float thirstThreshold) {
+
+        if (hungerMeter <= hungerThreshold) {
+            action = Action.FindFood;
+        }
+        else if (thirstMeter <= thirstThreshold) {
+            action = Action.FindWater;
+        }
+        else {
+            action = Action.Explore;
+        }
+    }
+
+    protected void Act(LivingEntityType type) {
+
+        if (action == Action.FindFood) {
+            if (!isMoving) {
+                MoveCommand(FindFoodCoord(myLocation, LivingEntityType.Grain, visionRadius));
+            }
+        }
+        else if (action == Action.FindWater) {
+            if (!isMoving) {
+                MoveCommand(FindWaterCoord(myLocation, visionRadius));
+            }
+        }
+        else if (action == Action.Explore) {
+            if (!isMoving) {
+                MoveCommand(FindRandomCoord(myLocation, visionRadius));
+            }
+        } 
+    }
+
+    public void MoveCommand(Coord dest) {
+
+        if (dest != null) {
+            path = null;
+            pathIndex = 0;
+            waypointCoord = null;
+            isMoving = false;
+
+            path = Navigation.PathFind(myLocation, dest);
+
+            if (path != null) {
+                pathIndex = 0;
+
+                waypointCoord = path[pathIndex];
+                isMoving = true;
+            }
+            else {
+                print("path not found");
+            }
+        }
+        else {
+            MoveCommand(FindRandomCoord(myLocation, visionRadius));
+            print("Target not found. Go random coord");
+        }
+    }
+
+
+    protected void EvaluateNextWaypoint() {
+
+        if (pathIndex <= path.Count - 1) {
+            waypointCoord = path[pathIndex];
+            isMoving = true;
+        }
+        else {
+            path = null;
+            pathIndex = 0;
+            isMoving = false;
+        }
+    }
+
+    #endregion
+
+
 }

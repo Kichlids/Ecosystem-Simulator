@@ -21,7 +21,7 @@ public static class Navigation {
 
     public static List<Coord> PathFind(Coord src, Coord dest) {
 
-        // Iteration counter to limit the scop
+        // Iteration counter to limit the scope
         int iteration = 0;
         bool[,] matrix = WorldGenerator._instance.walkableTiles;
         // Track all edges made
@@ -155,14 +155,14 @@ public static class Navigation {
         foreach (Coord element in nearbyTiles) {
             
             if (livingEntityType == LivingEntityType.Grain) {
-                flag = WorldGenerator._instance.activeTiles[element.x, element.y].gameObject.GetComponent<Tile>().hasGrain;
+                flag = WorldGenerator._instance.activeTiles[element.x, element.y].gameObject.GetComponent<Tile>().grainCount > 0;
             }
             else if (livingEntityType == LivingEntityType.Chicken) {
-                flag = WorldGenerator._instance.activeTiles[element.x, element.y].gameObject.GetComponent<Tile>().hasChicken;
+                flag = WorldGenerator._instance.activeTiles[element.x, element.y].gameObject.GetComponent<Tile>().chickenCount > 0;
                 Debug.Log(element.x + "," + element.y + ":" + flag);
             }
             else if (livingEntityType == LivingEntityType.Fox) {
-                flag = WorldGenerator._instance.activeTiles[element.x, element.y].gameObject.GetComponent<Tile>().hasFox;
+                flag = WorldGenerator._instance.activeTiles[element.x, element.y].gameObject.GetComponent<Tile>().foxCount > 0;
             }
             else {
                 return null;

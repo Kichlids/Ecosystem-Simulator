@@ -7,7 +7,7 @@ public class Tile : MonoBehaviour
     [SerializeField]
     public Coord location;
 
-    public bool hasGrain = false;
-    public bool hasChicken = false;
-    public bool hasFox = false;
+    public int grainCount = 0;
+    public int chickenCount = 0;
+    public int foxCount = 0;
 }

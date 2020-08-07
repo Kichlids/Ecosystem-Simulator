@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class Grain : MonoBehaviour
 {
-    void Start()
-    {
-        transform.parent.GetComponent<Tile>().hasGrain = true;
+    private void Start() {
+        transform.parent.GetComponent<Tile>().grainCount++;
     }
 
     private void OnDestroy() {
-        transform.parent.GetComponent<Tile>().hasGrain = false;
+        transform.parent.GetComponent<Tile>().grainCount--;
     }
 }

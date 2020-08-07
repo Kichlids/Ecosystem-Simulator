@@ -22,7 +22,7 @@ public class WorldInfo : MonoBehaviour {
     [Range(0, 1)]
     public float hillThreshold;
 
-    [Header("Item Spawns")]
+    [Header("Grain Constants")]
     public GameObject grainPrefab;
     [Range(0, 1)]
     public float grainInitSpawnChance = 0.1f;
@@ -30,19 +30,28 @@ public class WorldInfo : MonoBehaviour {
     public float grainSpawnTimeMax = 300f;
     public float grainConsumptionValue = 40f;
 
-    [Header("Animal Spawns")]
-    public GameObject chickenPrefab;
-    public float chickenMaxHealth = 100f;
-    public float chickenMaxTimeUntilDeathHunger = 100;
-    public float chickenHungerThreshold = 40;
-    public float chickenMaxTimeUntilDeathThirst = 100;
-    public float chickenThirstThreshold = 40;
-    public float chickenWalkSpeed = 0f;
-    public int chickenVisionRadius = 8;
-    public int chickenExploreRadius = 2;
-
+    [Header("Water Constants")]
     public float waterConsumptionValue = 40f;
 
+    [Header("Chicken Constants")]
+    public GameObject chickenPrefab;
+    public float chickenMaxHealth = 100f;
+    public float chickenMaxTimeUntilDeathHunger = 100f;
+    public float chickenHungerTriggerThreshold = 40f;
+    public float chickenMaxTimeUntilDeathThirst = 100f;
+    public float chickenThirstTriggerThreshold = 40f;
+    public float chickenWalkSpeed = 1f;
+    public int chickenVisionRadius = 8;
+
+    [Header("Fox Constants")]
+    public GameObject foxPrefab;
+    public float foxMaxHealth = 100f;
+    public float foxMaxTimeUntilDeathHunger = 100f;
+    public float foxHungerTriggerThreshold = 40f;
+    public float foxMaxTimeUntilDeathThirst = 100f;
+    public float foxThirstTriggerThreshold = 40f;
+    public float foxWalkSpeed = 4f;
+    public int foxVisionRadius = 4;
 
 
 

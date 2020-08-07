@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LandTile : Tile {
 
-    public GameObject grain;
+    private GameObject grain;
 
     [SerializeField]
     private float time;
@@ -13,7 +13,12 @@ public class LandTile : Tile {
 
     private void Start() {
 
-        hasGrain = false;
+        grain = WorldInfo._instance.grainPrefab;
+
+        grainCount = 0;
+        chickenCount = 0;
+        foxCount = 0;
+
         time = 0;
 
         nextGrainSpawnTime = Random.Range(WorldInfo._instance.grainSpawnTimeMin, WorldInfo._instance.grainSpawnTimeMax);
@@ -21,7 +26,7 @@ public class LandTile : Tile {
 
     private void Update() {
 
-        if (!hasGrain) {
+        if (grainCount <= 0) {
 
             if (time >= nextGrainSpawnTime) {
                 SpawnGrain();
@@ -36,19 +41,19 @@ public class LandTile : Tile {
     }
 
     private void SpawnGrain() {
-        if (!hasGrain) {
+        if (grainCount <= 0) {
             grain = Instantiate(WorldInfo._instance.grainPrefab, transform.position + new Vector3(0, 5.5f, 0), Quaternion.identity);
             grain.transform.parent = transform;
-           // hasGrain = true;
-
+            //hasGrain = true;
+            
             WorldGenerator._instance.grainCount++;
         }
     }
 
     public void PickGrain() {
-        if (hasGrain) {
+        if (grainCount <= 0) {
             Destroy(grain.gameObject);
-            hasGrain = false;
+            //hasGrain = false;
 
             WorldGenerator._instance.grainCount--;
         }
